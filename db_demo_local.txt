@@ -1,0 +1,58 @@
+CREATE TABLE students(
+stuid int not null, 
+fname VARCHAR(30), 
+lname VARCHAR(30),
+primary key (stuid)
+);
+
+CREATE TABLE exams(
+examid int not null, 
+desc VARCHAR(200), 
+date VARCHAR(30),
+primary key (examid)
+);
+
+CREATE TABLE notes(
+stuid int not null,
+examid int not null, 
+note int not null, 
+comment varchar(200),
+primary key (stuid, examid),
+foreign key (stuid) references students(stuid),
+foreign key (examid) references exams(examid)
+);
+
+insert into students values (1,"ludovic","lipo");
+insert into students values (2,"sarah","topo");
+insert into students values (3,"gaelle","pado");
+insert into students values (4,"lisa","tocco");
+insert into students values (5,"jon","malo");
+
+insert into exams values (1,"First IT exam","11.11.2025");
+insert into exams values (2,"Second IT exam","23.01.2026");
+
+insert into notes values (1,1,3,"Lorem ipsum dolor sit amet.");
+insert into notes values (2,1,4,"Lorem ipsum dolor sit amet.");
+insert into notes values (3,1,2,"Lorem ipsum dolor sit amet.");
+insert into notes values (4,1,5,"Lorem ipsum dolor sit amet.");
+insert into notes values (5,1,5,"Lorem ipsum dolor sit amet.");
+insert into notes values (1,2,4,"Lorem ipsum dolor sit amet.");
+insert into notes values (2,2,6,"Lorem ipsum dolor sit amet.");
+insert into notes values (3,2,3,"Lorem ipsum dolor sit amet.");
+insert into notes values (4,2,2,"Lorem ipsum dolor sit amet.");
+insert into notes values (5,2,6,"Lorem ipsum dolor sit amet.");
+
+#all data
+select * from students inner join notes on students.stuid = notes.stuid inner join exams on exams.examid = notes.examid
+
+#all data for ludovic
+select * from students inner join notes on students.stuid = notes.stuid inner join exams on exams.examid = notes.examid where fname = "ludovic"
+
+#only what is of interest to me
+select fname, lname, was, wann, note from students inner join notes on students.stuid = notes.stuid inner join exams on exams.examid = notes.examid where fname = "ludovic"
+
+#avg for everybody
+select fname, lname, avg(note) from students inner join notes on students.stuid = notes.stuid inner join exams on exams.examid = notes.examid group by fname, lname
+
+#cannot delete ludovic because constraintes on FK
+delete from students where stuid = 1
